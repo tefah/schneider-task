@@ -22,7 +22,7 @@
 /machineid
 /rapid_render.json
 /storage.json
-
+/.vscode
 
 # testing
 /coverage
