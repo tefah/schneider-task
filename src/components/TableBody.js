@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 
 const TableBody = props => (
     <tr>
-        <td>  <input type="checkbox"  /> </td>
+        <td>  <input type="checkbox" checked={props.selected} onChange={e => {props.select(e.target.checked, props.employee)}} /> </td>
         <td>{props.employee.sesaNumber}</td>
         <td>{props.employee.fullName}</td>
         <td>{props.employee.employeeNumber}</td>

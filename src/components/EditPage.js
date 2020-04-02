@@ -13,10 +13,6 @@ class EditPage extends React.Component {
         team: '',
         manager: ''
     }
-    // constructor(){
-    //     super()
-    //     this.onSuccess = this.onSuccess.bind(this)
-    // }
 
     componentDidMount(){
          if (this.props.match.params.id) {
@@ -37,7 +33,8 @@ class EditPage extends React.Component {
                     window.location = '/'
                 }
             },
-            err => console.error(err))
+            err => console.error(err)
+        )
     }
 
     render() {
