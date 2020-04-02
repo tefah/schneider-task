@@ -7,6 +7,22 @@
 /backend/node_modules
 /backend/error.txt
 
+#chrome debugger
+/Backups
+/CachedData
+/CachedExtensions
+/Cookies
+/Cookies-journal
+/Network Persistent State
+/TransportSecurity
+/User
+/languagepacks.json
+/User
+/logs
+/machineid
+/rapid_render.json
+/storage.json
+
 
 # testing
 /coverage
