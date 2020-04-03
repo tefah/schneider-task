@@ -32,6 +32,6 @@ export const getEmployees = (onSuccess, onError) => {
 // GET localhost:5000/employees/:id
 export const getEmployeeByID = (id, onSuccess, onError) => {
     axios.get(baseurl + `/${id}`)
-            .then(res => onSuccess(res))
+            .then(res => onSuccess(res.data))
             .catch(err => onError(err))
 }

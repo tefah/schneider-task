@@ -12,22 +12,34 @@ class HomePage extends React.Component {
         selected: [],
     }
 
-    // go to /edit/:id
-    editEmployee = () => {
-        //go to /edit with the employee to edit
-        window.location = '/edit/' + this.state.selected[0]._id
-    }
-
-    deleteEmployee = (id) => {
-        //call for delete employee here
-        deleteEmployee(id)
-    }
     componentDidMount = () => {
         //getting employees data and setting the state with the new data
         getEmployees(res => {
             this.setState({employees: res.data  })
         },
         err => console.log(err))
+    }
+
+    //remove employees from UI and empty selected
+    onSuccessRemovingEmployees = res => {
+        const ids = this.state.selected.map(emp => emp._id)
+        if(res.status === 200){
+            this.setState((state, props) => {
+                console.log(state.employees.filter(employee => !ids.includes(employee._id)))
+                return{
+                    employees: state.employees.filter(employee => !ids.includes(employee._id)),
+                    selected: []
+                }
+            })
+        }
+    }
+    //delete selected employees by making string of ids 'id1,id2,id3,...'
+    deleteSelected = () => {
+        const ids = this.state.selected.map(emp => emp._id)
+        const idStr = ids.toString()
+        deleteEmployee(idStr, 
+            this.onSuccessRemovingEmployees,
+            err => console.log(err))
     }
 
     //select / DEselect an entry by id
@@ -44,7 +56,6 @@ class HomePage extends React.Component {
             this.setState({
                 selected: newSelected
             })
-            console.log(this.state.selected)
         }
     }
 
@@ -64,10 +75,15 @@ class HomePage extends React.Component {
                 <Link to='/edit'>
                     <Button variant="outline-primary" >ADD</Button>
                 </Link> {'     '}
-                <Button onClick={this.editEmployee}  
+                <Button onClick={() => window.location = '/edit/' + this.state.selected[0]._id}  
                 disabled={this.state.selected.length !== 1 }
-                    variant="outline-secondary" >
+                variant="outline-secondary" >
                     EDIT
+                </Button>{'         '}
+                <Button onClick={this.deleteSelected}  
+                disabled={this.state.selected.length  < 1 }
+                variant="outline-secondary" >
+                    Delete
                 </Button>
                 {/* <Container >
                     <Row className="justify-content-md-center">

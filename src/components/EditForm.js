@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 
 const EditForm = (props) => {
     const {employee, submit} = props 
-    const { handleSubmit, register, errors, setValue } = useForm()
+    const { handleSubmit, register, errors, setValue, formState } = useForm()
 
-    if (employee._id)  {
+    if (employee._id && !formState.dirty)  {
         setValue([
         {sesaNumber: employee.sesaNumber},
         {fullName: employee.fullName},
@@ -18,13 +18,10 @@ const EditForm = (props) => {
         {manager: employee.team},
       ])
     }
-    
-    const onSubmit = values => {
-        submit(values)
-    };
+
     return (
         <div className='container' >
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(values => submit(values))}>
                 <div>
                     <label htmlFor="sesaNumber">SESA number</label>
                     <input
