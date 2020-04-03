@@ -4,14 +4,6 @@ import {getEmployeeByID, addEmployee, editEmployee} from '../httpUtils/EmployeeR
 class EditPage extends React.Component {
     state = {
         employee:{},
-        sesaNumber: '',
-        fullName: '',
-        employeeNumber: '',
-        phoneNumber: '',
-        email: '',
-        department: '',
-        team: '',
-        manager: ''
     }
 
     componentDidMount(){

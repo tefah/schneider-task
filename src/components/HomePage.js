@@ -1,7 +1,7 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
 import TableBody from './TableBody'
-import { Button, Container, Row ,  Col} from 'react-bootstrap'
+import { Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import {getEmployees} from '../httpUtils/EmployeeRequests'
 import {deleteEmployee} from '../httpUtils/EmployeeRequests'
@@ -21,11 +21,9 @@ class HomePage extends React.Component {
     }
 
     //remove employees from UI and empty selected
-    onSuccessRemovingEmployees = res => {
-        const ids = this.state.selected.map(emp => emp._id)
+    onSuccessRemovingEmployees = (res, ids) => {
         if(res.status === 200){
             this.setState((state, props) => {
-                console.log(state.employees.filter(employee => !ids.includes(employee._id)))
                 return{
                     employees: state.employees.filter(employee => !ids.includes(employee._id)),
                     selected: []
@@ -35,11 +33,22 @@ class HomePage extends React.Component {
     }
     //delete selected employees by making string of ids 'id1,id2,id3,...'
     deleteSelected = () => {
-        const ids = this.state.selected.map(emp => emp._id)
-        const idStr = ids.toString()
-        deleteEmployee(idStr, 
-            this.onSuccessRemovingEmployees,
-            err => console.log(err))
+        if (window.confirm('Are you sure you wish to delete the selected employees?')){
+            const ids = this.state.selected.map(emp => emp._id)
+            const idStr = ids.toString()
+            deleteEmployee(idStr, 
+                res => this.onSuccessRemovingEmployees(res, ids),
+                err => console.log(err))
+        }
+    }
+
+    //delete employee through employee delete button
+    deleteEmp = (id)=>{
+        if (window.confirm('Are you sure you wish to delete the selected employees?')){
+            deleteEmployee(id, 
+                res => this.onSuccessRemovingEmployees(res, [id]),
+                err => console.log(err))
+        }
     }
 
     //select / DEselect an entry by id
@@ -50,9 +59,8 @@ class HomePage extends React.Component {
             this.setState({
                 selected: newSelected
             })
-            console.log(this.state.selected)
         }else{
-            const newSelected = this.state.selected.filter(employee => employee != emp)
+            const newSelected = this.state.selected.filter(employee => employee !== emp)
             this.setState({
                 selected: newSelected
             })
@@ -72,6 +80,8 @@ class HomePage extends React.Component {
         return (
             <div className='container'>
 
+                <h2>Employees list</h2>
+
                 <Link to='/edit'>
                     <Button variant="outline-primary" >ADD</Button>
                 </Link> {'     '}
@@ -85,24 +95,7 @@ class HomePage extends React.Component {
                 variant="outline-secondary" >
                     Delete
                 </Button>
-                {/* <Container >
-                    <Row className="justify-content-md-center">
-                    <Col as='input'  xs lg="2">
-                        <label>Schneider Employees</label>
-                    </Col>
-                    <Col md="auto">
-                        <Link to='/edit'>
-                            <Button variant="outline-primary" >ADD</Button>
-                        </Link> 
-                    </Col>
-                    <Col xs lg="2">
-                        <Button variant="outline-primary" >edit</Button>
-                    </Col>
-                    <col>
-                        <Button variant="outline-primary" >delete</Button>
-                    </col>
-                    </Row>
-                </Container> */}
+                
                 <div className="container">
                    
 
@@ -124,13 +117,14 @@ class HomePage extends React.Component {
                         <th>Department</th>
                         <th>Team</th>
                         <th>Manager</th>
+                        <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.employees.map(employee => {
                             return (<TableBody 
                                 employee={employee} 
-                                delete={this.deleteEmployee}
+                                delete={this.deleteEmp}
                                 select={this.selectEmployee}
                                 edit={this.editEmployee}
                                 key={employee._id}
