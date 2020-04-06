@@ -3,6 +3,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 
 const employeesRoute = require('./routes/employeesRouter')
+const departmentRoute = require('./routes/departmentRouter')
 
 // Connect to DB
 mongoose.connect(`mongodb://localhost/schneider-task`)
@@ -14,6 +15,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use('/employees', employeesRoute)
+app.use('/departments', departmentRoute)
 
 const port = 5000
 

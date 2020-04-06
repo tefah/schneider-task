@@ -35,3 +35,11 @@ export const getEmployeeByID = (id, onSuccess, onError) => {
             .then(res => onSuccess(res.data))
             .catch(err => onError(err))
 }
+
+// this should be transmitted to another file
+// GET localhost:5000/departments
+export const getDepartments = (onSuccess, onError) => {
+    axios.get('http://localhost:5000/departments')
+            .then(res => {onSuccess(res.data)})
+            .catch(err => onError(err))
+}

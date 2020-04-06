@@ -18,7 +18,7 @@ exports.addEmployee = (req,res) => {
 
 // Handler for GET localhost:5000/employees
 exports.getEmployees = (req, res) => {
-    const emps = employees.find()
+    employees.find()
     .then(result => {
         res.json(result)
     })
@@ -45,13 +45,15 @@ exports.getSingleEmployee = (req, res) => {
 // ids => must be comma seperated values
 exports.deleteEmployees = (req, res) => {
     const ids = req.query.id.split(',')
-    employees.deleteMany({_id: {$in: ids}})
-    .then(() => res.json('employee/s deleted.'))
-    .catch(err => {
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        utils.errorLogging(ip, err)
-        res.status(400).send(`ERROR: while deleteing employees please try again`)
-    })
+    ids.forEach(id => {
+        employees.findByIdAndRemove(id)
+        .then(() => res.json('employee/s deleted.'))
+        .catch(err => {
+            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            utils.errorLogging(ip, err)
+            res.status(400).send(`ERROR: while deleteing employees please try again`)
+        })
+    });    
 }
 
 // Handler for PUT localhost:5000/employees/update/:id

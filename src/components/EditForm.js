@@ -101,19 +101,12 @@ const EditForm = (props) => {
                 
                 <div>
                     <label htmlFor="department">Department</label>
-                    <input
-                    name="department"
-                    ref={register({
-                        required: 'Required',
-                        minLength: {value: 3, message: "min length is 3"},
-                        maxLength: {value: 50, message: "max length is 50"},
-                        pattern: {
-                        value: /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/i,
-                        message: "invalid charcters used in department"
-                        }
-                    })}
-                    />
-                    {errors.department && errors.department.message}
+                    <select name='department' ref={register} >
+                        {props.deps.map(dep => (
+                            <option value={dep.name} key={dep.name}>{dep.name}</option>
+                        ))}
+                    </select>
+
                 </div>
                 
                 <div>
