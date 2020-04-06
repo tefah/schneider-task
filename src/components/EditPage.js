@@ -1,6 +1,8 @@
 import React from 'react'
 import EditForm from './EditForm'
-import {getEmployeeByID, addEmployee, editEmployee, getDepartments} from '../httpUtils/EmployeeRequests'
+import {getEmployeeByID, addEmployee, editEmployee} from '../httpUtils/EmployeeRequests'
+import {getDepartments} from '../httpUtils/departmentsRequest'
+
 class EditPage extends React.Component {
     state = {
         employee:{},
@@ -11,17 +13,14 @@ class EditPage extends React.Component {
          if (this.props.match.params.id) {
             //call to change the state if update
             getEmployeeByID(this.props.match.params.id,
-                emp => this.setState({
-                    employee: emp,
-                    IS_UPDATE: true
-                }),
+                emp => this.setState({ employee: emp }),
                 err => console.error(err)
             )
-            getDepartments(
-                deps => this.setState({departments: deps}),
-                err => console.log(err)
-            )
         }
+        getDepartments(
+            deps => this.setState({departments: deps}),
+            err => console.log(err)
+        )
     }
 
     //submit (add - edit) employee depending on the context
@@ -54,7 +53,6 @@ class EditPage extends React.Component {
     }
 
     render() {
-        console.log('rerendered')
         return (
             <EditForm 
             employee={this.state.employee}

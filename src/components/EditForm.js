@@ -2,9 +2,12 @@ import React from 'react'
 import {Button} from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 
+
+let oldep = ''
+
 const EditForm = (props) => {
-    const {employee, submit} = props 
-    const { handleSubmit, register, errors, setValue, formState } = useForm()
+    const {employee, submit, deps} = props 
+    const { handleSubmit, register, errors, setValue, getValues, formState, watch } = useForm()
 
     if (employee._id && !formState.dirty)  {
         setValue([
@@ -17,6 +20,20 @@ const EditForm = (props) => {
         {team: employee.team},
         {manager: employee.team},
       ])
+    }
+
+    //watching for input department to change
+    let department = watch('department')
+
+    // run in the begining to make sure the manager input is set to whoever manager of the first department
+    if(!formState.dirty){oldep = deps[0].name}
+    
+    //see if the deparment changed it change the manager accordingly 
+    if(department !== oldep ){
+        oldep = department
+        let manager = deps[0].manager
+        deps.forEach(dep => manager = dep.name === department?dep.manager:manager)
+        setValue([{manager: manager}])
     }
 
     return (
@@ -102,7 +119,7 @@ const EditForm = (props) => {
                 <div>
                     <label htmlFor="department">Department</label>
                     <select name='department' ref={register} >
-                        {props.deps.map(dep => (
+                        {deps.map(dep => (
                             <option value={dep.name} key={dep.name}>{dep.name}</option>
                         ))}
                     </select>
