@@ -41,6 +41,7 @@ exports.getSingleDepartment = (req, res) => {
     })
 }
 
+// TODO: change this function to delete all the employees in the department
 // Handler for DELETE localhost:5000/departments/?id=x,x,x,x
 // ids => must be comma seperated values
 exports.deleteDepartments = (req, res) => {
@@ -63,7 +64,7 @@ exports.updateDepEmp = async(name, IS_INC) => {
         }else{
             dep = await departments.findOneAndUpdate({name: name},{ $inc: { numberOfEmployees: -1 } })
         }
-        console.log("Updated Sucessfully: ", dep )
+        // console.log("Updated Sucessfully: ", dep )
     }catch(err) {
         console.log(err)
     }

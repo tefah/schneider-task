@@ -4,7 +4,11 @@ const utils = require('../utils')
 
 // handler for POST localhost:5000/employees/add
 exports.addEmployee = (req,res) => {
-    const emp = new employees(req.body)
+    const employee = {
+        ...req.body,
+        oldDepartment: req.body.department
+    }
+    const emp = new employees(employee)
     //adding new employee
     emp.save().then(data =>{
         res.send("added Sucessfully")
@@ -67,5 +71,13 @@ exports.updateEmployee = (req, res) => {
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         utils.errorLogging(ip, err)
         res.status(400).send(`ERROR: while updating employee please try again`)
+    })
+}
+// update employee department due to employee update 
+exports.updateEmployeeInternally = (employee) => {
+    employees.findOneAndUpdate({_id:  employee._id}, employee)
+    .catch(err => {
+        // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        utils.errorLogging('Internal update to employee failed', err)
     })
 }

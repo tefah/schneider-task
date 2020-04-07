@@ -7,7 +7,7 @@ let oldep = ''
 
 const EditForm = (props) => {
     const {employee, submit, deps} = props 
-    const { handleSubmit, register, errors, setValue, getValues, formState, watch } = useForm()
+    const { handleSubmit, register, errors, setValue, formState, watch } = useForm()
 
     if (employee._id && !formState.dirty)  {
         setValue([
@@ -29,7 +29,7 @@ const EditForm = (props) => {
     if(!formState.dirty){oldep = deps[0].name}
     
     //see if the deparment changed it change the manager accordingly 
-    if(department !== oldep ){
+    if(department !== oldep && !employee._id){
         oldep = department
         let manager = deps[0].manager
         deps.forEach(dep => manager = dep.name === department?dep.manager:manager)
@@ -119,9 +119,9 @@ const EditForm = (props) => {
                 <div>
                     <label htmlFor="department">Department</label>
                     <select name='department' ref={register} >
-                        {deps.map(dep => (
-                            <option value={dep.name} key={dep.name}>{dep.name}</option>
-                        ))}
+                        {deps.map(dep => {
+                            return (<option value={dep.name} key={dep._id} >{dep.name}</option>)
+                        })}
                     </select>
 
                 </div>
@@ -146,6 +146,7 @@ const EditForm = (props) => {
                 <div>
                     <label htmlFor="manager">Manager</label>
                     <input
+                    disabled
                     name="manager"
                     ref={register({
                         required: 'Required',

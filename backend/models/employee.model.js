@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const departmemtsController = require('../controllers/departmentController')
+const employeeController = require('../controllers/employeeController')
 
 const employeeFields = {
     sesaNumber:{type: Number,required: true, unique: true, trim: true},
@@ -11,8 +12,8 @@ const employeeFields = {
     email: {type: String, trim: true, required: true},
     department: {type: String, trim: true, required: true},
     team: {type: String, trim: true, required: true},
-    manager: {type: String, trim: true, required: true}
-
+    manager: {type: String, trim: true, required: true},
+    oldDepartment: String
 }
 
 const employeeSchema = new schema(employeeFields, {timestamps: true})
@@ -20,10 +21,26 @@ const employeeSchema = new schema(employeeFields, {timestamps: true})
 //incrementing # of employees after adding new employee
 employeeSchema.post('save', (emp) => {
     departmemtsController.updateDepEmp(emp.department, true)
+    console.log('save mw', this)
   });
 
 //decrementing # of employees after removing employee
 employeeSchema.post('findOneAndRemove', (emp) => {
     departmemtsController.updateDepEmp(emp.department, false)
-  });
+  })
+  
+  employeeSchema.post('findOneAndUpdate', (emp) => {
+    if(emp.department !== emp.oldDepartment){
+      departmemtsController.updateDepEmp(emp.department, true)
+      departmemtsController.updateDepEmp(emp.oldDepartment, false)
+      //TODO update employee making oldDepartment == department
+      console.log(emp)
+      emp.oldDepartment = emp.department
+      console.log(emp)
+      employeeController.updateEmployeeInternally(emp)
+      console.log('after update', this)
+    }
+ 
+  })
+
 module.exports = mongoose.model('employee', employeeSchema)
