@@ -10,7 +10,7 @@ const employeeFields = {
     employeeNumber: {type: Number, required: true, unique: true, trim: true},
     phoneNumber: {type: String, required: true, unique: true, trim: true},
     email: {type: String, trim: true, required: true},
-    department: {type: String, trim: true, required: true},
+    departmentID: {type: String, trim: true, required: true},
     team: {type: String, trim: true, required: true},
     manager: {type: String, trim: true, required: true},
     oldDepartment: String
@@ -20,22 +20,22 @@ const employeeSchema = new schema(employeeFields, {timestamps: true})
 
 //incrementing # of employees after adding new employee
 employeeSchema.post('save', (emp) => {
-    departmemtsController.updateDepEmp(emp.department, true)
+    departmemtsController.updateDepEmp(emp.departmentID, true)
     console.log('save mw', this)
   });
 
 //decrementing # of employees after removing employee
 employeeSchema.post('findOneAndRemove', (emp) => {
-    departmemtsController.updateDepEmp(emp.department, false)
+    departmemtsController.updateDepEmp(emp.departmentID, false)
   })
   
   employeeSchema.post('findOneAndUpdate', (emp) => {
-    if(emp.department !== emp.oldDepartment){
-      departmemtsController.updateDepEmp(emp.department, true)
-      departmemtsController.updateDepEmp(emp.oldDepartment, false)
+    if(emp.departmentID !== emp.oldDepartmentID){
+      departmemtsController.updateDepEmp(emp.departmentID, true)
+      departmemtsController.updateDepEmp(emp.oldDepartmentID, false)
       //TODO update employee making oldDepartment == department
       console.log(emp)
-      emp.oldDepartment = emp.department
+      emp.oldDepartmentID = emp.departmentID
       console.log(emp)
       employeeController.updateEmployeeInternally(emp)
       console.log('after update', this)

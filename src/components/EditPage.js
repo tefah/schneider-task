@@ -10,7 +10,7 @@ class EditPage extends React.Component {
     }
 
     componentDidMount(){
-         if (this.props.match.params.id) {
+        if (this.props.match.params.id) {
             //call to change the state if update
             getEmployeeByID(this.props.match.params.id,
                 emp => this.setState({ employee: emp }),
@@ -21,6 +21,7 @@ class EditPage extends React.Component {
             deps => this.setState({departments: deps}),
             err => console.log(err)
         )
+        
     }
 
     //submit (add - edit) employee depending on the context
@@ -33,7 +34,7 @@ class EditPage extends React.Component {
             editEmployee(employee, 
                 res => {
                     if (res.status === 200){
-                        //toast updated successfully
+                        //TODO: toast updated successfully
                         window.location = '/'
                     }
                 },
@@ -43,7 +44,7 @@ class EditPage extends React.Component {
             addEmployee(employee,
                 res => {
                     if (res.status === 200){
-                        //toast added successfully
+                        //TODO: toast added successfully
                         window.location = '/'
                     }
                 },
@@ -57,7 +58,8 @@ class EditPage extends React.Component {
             <EditForm 
             employee={this.state.employee}
             submit={this.submit}
-            deps={this.state.departments}/>
+            deps={this.state.departments}
+            oldDepID={this.state.employee.departmentID?this.state.employee.departmentID:this.state.departments[0]._id}/>
         )
     }
 }

@@ -22,7 +22,7 @@ export const deleteDepartment = (ids, onSuccess, onError) => {
 // GET localhost:5000/departments
 export const getDepartments = (onSuccess, onError) => {
     axios.get(baseurl)
-            .then(res => {console.log(res);onSuccess(res.data)})
+            .then(res => {onSuccess(res.data)})
             .catch(err => onError(err))
 }
 

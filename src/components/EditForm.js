@@ -1,39 +1,43 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Button} from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 
 
-let oldep = ''
-
 const EditForm = (props) => {
-    const {employee, submit, deps} = props 
+    const {employee, submit, deps, oldDepID} = props 
     const { handleSubmit, register, errors, setValue, formState, watch } = useForm()
 
+    
+    const [oldDepIDState, setOldDepID] = useState(oldDepID);
+
     if (employee._id && !formState.dirty)  {
+        //getting department from the dep ID
+        console.log(employee)
+        const empDep = deps.find(dep => dep._id === employee.departmentID)
         setValue([
         {sesaNumber: employee.sesaNumber},
         {fullName: employee.fullName},
         {employeeNumber: employee.employeeNumber},
         {phoneNumber: employee.phoneNumber},
         {email: employee.email},
-        {department: employee.department},
+        {departmentID: employee.empDep},
         {team: employee.team},
-        {manager: employee.team},
+        {manager: employee.manager},
       ])
     }
-
+    
     //watching for input department to change
-    let department = watch('department')
+    let departmentID = watch('departmentID')
 
-    // run in the begining to make sure the manager input is set to whoever manager of the first department
-    if(!formState.dirty){oldep = deps[0].name}
+    // // run in the begining to make sure the manager input is set to whoever manager of the first department
+    // if(!formState.dirty){oldDepID = deps[0]._id}
     
     //see if the deparment changed it change the manager accordingly 
-    if(department !== oldep && !employee._id){
-        oldep = department
+    if(departmentID !== oldDepIDState){
         let manager = deps[0].manager
-        deps.forEach(dep => manager = dep.name === department?dep.manager:manager)
+        deps.forEach(dep => manager = dep._id === departmentID?dep.manager:manager)
         setValue([{manager: manager}])
+        setOldDepID(departmentID)
     }
 
     return (
@@ -117,10 +121,10 @@ const EditForm = (props) => {
                 </div>
                 
                 <div>
-                    <label htmlFor="department">Department</label>
-                    <select name='department' ref={register} >
+                    <label htmlFor="departmentID">Department</label>
+                    <select name='departmentID' ref={register} >
                         {deps.map(dep => {
-                            return (<option value={dep.name} key={dep._id} >{dep.name}</option>)
+                            return (<option value={dep._id} key={dep._id} >{dep.name}</option>)
                         })}
                     </select>
 

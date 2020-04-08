@@ -3,21 +3,26 @@ import Table from 'react-bootstrap/Table'
 import TableBody from './TableBody'
 import { Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
-import {getEmployees} from '../httpUtils/EmployeeRequests'
-import {deleteEmployee} from '../httpUtils/EmployeeRequests'
+import {getEmployees, deleteEmployee} from '../httpUtils/EmployeeRequests'
+import {getDepartments} from '../httpUtils/departmentsRequest'
 
 class HomePage extends React.Component {
     state = {
         employees: [],
         selected: [],
+        departments:[]
     }
 
     componentDidMount = () => {
         //getting employees data and setting the state with the new data
-        getEmployees(res => {
-            this.setState({employees: res.data  })
-        },
-        err => console.log(err))
+        getDepartments(
+            deps => this.setState({departments: deps}),
+            err => console.log(err)
+        )
+        getEmployees(
+            res => { this.setState({employees: res.data  })},
+            err => console.log(err))
+
     }
 
     //remove employees from UI and empty selected
@@ -124,11 +129,11 @@ class HomePage extends React.Component {
                         {this.state.employees.map(employee => {
                             return (<TableBody 
                                 employee={employee} 
-                                delete={this.deleteEmp}
+                                deleteEmp={this.deleteEmp}
                                 select={this.selectEmployee}
-                                edit={this.editEmployee}
                                 key={employee._id}
-                                selected={this.state.selected.includes(employee)} />)
+                                selected={this.state.selected.includes(employee)}
+                                departments={this.state.departments} />)
                         })}
                     </tbody>
                 </Table>

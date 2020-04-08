@@ -56,15 +56,14 @@ exports.deleteDepartments = (req, res) => {
 }
 
 // increments/decrements the number of employees of a department by 1
-exports.updateDepEmp = async(name, IS_INC) => {
+exports.updateDepEmp = async(id, IS_INC) => {
     try{
         let dep = ''
         if(IS_INC){
-            dep = await departments.findOneAndUpdate({name: name},{ $inc: { numberOfEmployees: 1 } })
+            dep = await departments.findOneAndUpdate({_id: id},{ $inc: { numberOfEmployees: 1 } })
         }else{
-            dep = await departments.findOneAndUpdate({name: name},{ $inc: { numberOfEmployees: -1 } })
+            dep = await departments.findOneAndUpdate({_id: id},{ $inc: { numberOfEmployees: -1 } })
         }
-        // console.log("Updated Sucessfully: ", dep )
     }catch(err) {
         console.log(err)
     }
