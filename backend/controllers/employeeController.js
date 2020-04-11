@@ -6,7 +6,7 @@ const utils = require('../utils')
 exports.addEmployee = (req,res) => {
     const employee = {
         ...req.body,
-        oldDepartment: req.body.department
+        oldDepartmentID: req.body.departmentID
     }
     const emp = new employees(employee)
     //adding new employee
@@ -64,7 +64,8 @@ exports.deleteEmployees = (req, res) => {
 exports.updateEmployee = (req, res) => {
     const id = req.params.id
     employees.findOneAndUpdate({_id: id}, req.body)
-    .then(() => {
+    .then((data) => {
+        console.log(data)
         res.send("Updated Sucessfully")
     })
     .catch(err => {
