@@ -27,18 +27,5 @@ employeeSchema.post('save', (emp) => {
 employeeSchema.post('findOneAndRemove', (emp) => {
     departmemtsController.updateDepEmp(emp.departmentID, false)
   })
-  
-  employeeSchema.post('findOneAndUpdate', (emp) => {
-    console.log('>>>>>>>>>>>>>>>>>', emp)
-    // if(emp.departmentID !== emp.oldDepartmentID){
-    //   departmemtsController.updateDepEmp(emp.departmentID, true)
-    //   departmemtsController.updateDepEmp(emp.oldDepartmentID, false)
-    //   //TODO update employee making oldDepartment == department
-    //   emp.oldDepartmentID = emp.departmentID
-
-    //   employeeController.updateEmployeeInternally(emp)
-    //   console.log('after update', emp)
-    // }
-  })
 
 module.exports = mongoose.model('employee', employeeSchema)

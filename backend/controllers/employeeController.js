@@ -1,5 +1,6 @@
 
 const employees= require('../models/employee.model')
+const departmemtsController = require('./departmentController')
 const utils = require('../utils')
 
 // handler for POST localhost:5000/employees/add
@@ -60,12 +61,39 @@ exports.deleteEmployees = (req, res) => {
     });    
 }
 
+
+// update employee department due to employee update
+updateEmployeeInternally = (employee) => {
+    employees.findOneAndUpdate({_id:  employee._id}, employee)
+    .then(()=> 'update success')
+    .catch(err => {
+        // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        utils.errorLogging('Internal update to employee failed', err)
+    })
+}
+// update employee department/oldDep ids 
+updateDepIDS = (id) => {
+    employees.findById(id)
+        .then(employee => {
+            if(employee.departmentID !== employee.oldDepartmentID){
+            departmemtsController.updateDepEmp(employee.departmentID, true)
+            departmemtsController.updateDepEmp(employee.oldDepartmentID, false)
+            //TODO update employee making oldDepartment == department
+            employee.oldDepartmentID = employee.departmentID
+            updateEmployeeInternally(employee)
+            }
+        })
+        .catch(err => {
+            // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            utils.errorLogging('Internal update to employee failed', err)
+        })
+}
 // Handler for PUT localhost:5000/employees/update/:id
 exports.updateEmployee = (req, res) => {
     const id = req.params.id
     employees.findOneAndUpdate({_id: id}, req.body)
     .then((data) => {
-        console.log(data)
+        updateDepIDS(id)
         res.send("Updated Sucessfully")
     })
     .catch(err => {
@@ -74,9 +102,10 @@ exports.updateEmployee = (req, res) => {
         res.status(400).send(`ERROR: while updating employee please try again`)
     })
 }
-// update employee department due to employee update 
+// update employee department due to employee update
 exports.updateEmployeeInternally = (employee) => {
     employees.findOneAndUpdate({_id:  employee._id}, employee)
+    .then(()=> 'update success')
     .catch(err => {
         // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         utils.errorLogging('Internal update to employee failed', err)
