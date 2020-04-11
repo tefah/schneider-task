@@ -1,18 +1,16 @@
 import React, {useState} from 'react'
 import {Button} from 'react-bootstrap';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 
 const EditForm = (props) => {
     const {employee, submit, deps, oldDepID} = props 
-    const { handleSubmit, register, errors, setValue, formState, watch } = useForm()
+    const { handleSubmit, register, errors, setValue, formState, watch, control } = useForm()
 
     
     const [oldDepIDState, setOldDepID] = useState(oldDepID);
-
-    if (employee._id && !formState.dirty)  {
+    if (employee._id && deps[0]._id && !formState.dirty)  {
         //getting department from the dep ID
-        console.log(employee)
         const empDep = deps.find(dep => dep._id === employee.departmentID)
         setValue([
         {sesaNumber: employee.sesaNumber},
@@ -20,20 +18,18 @@ const EditForm = (props) => {
         {employeeNumber: employee.employeeNumber},
         {phoneNumber: employee.phoneNumber},
         {email: employee.email},
-        {departmentID: employee.empDep},
+        {departmentID: empDep._id},
         {team: employee.team},
         {manager: employee.manager},
       ])
     }
     
-    //watching for input department to change
-    let departmentID = watch('departmentID')
-
     // // run in the begining to make sure the manager input is set to whoever manager of the first department
     // if(!formState.dirty){oldDepID = deps[0]._id}
     
     //see if the deparment changed it change the manager accordingly 
-    if(departmentID !== oldDepIDState){
+    if(watch('departmentID') !== oldDepIDState){
+        const departmentID = watch('departmentID')
         let manager = deps[0].manager
         deps.forEach(dep => manager = dep._id === departmentID?dep.manager:manager)
         setValue([{manager: manager}])
@@ -91,7 +87,7 @@ const EditForm = (props) => {
                 </div>
                 
                 <div>
-                    <label htmlFor="employeeNumber">Phone number</label>
+                    <label htmlFor="phoneNumber">Phone number</label>
                     <input
                     name="phoneNumber"
                     ref={register({
@@ -122,12 +118,17 @@ const EditForm = (props) => {
                 
                 <div>
                     <label htmlFor="departmentID">Department</label>
-                    <select name='departmentID' ref={register} >
-                        {deps.map(dep => {
-                            return (<option value={dep._id} key={dep._id} >{dep.name}</option>)
-                        })}
-                    </select>
-
+                    <Controller
+                    as={<select >
+                        {deps.map(dep => (
+                            <option value={dep._id} key={dep.name}>{dep.name}</option>
+                        ))}
+                    </select>}
+                    name='departmentID'
+                    control={control} 
+                    onChange={([currentTarget])=> {return currentTarget}}
+                    defaultValue={employee.departmentID}
+                    />
                 </div>
                 
                 <div>
@@ -161,6 +162,7 @@ const EditForm = (props) => {
                         message: "invalid charcters used in manager"
                         }
                     })}
+                    defaultValue={deps[0]?deps[0].manager:''}
                     />
                     {errors.manager && errors.manager.message}
                 </div>

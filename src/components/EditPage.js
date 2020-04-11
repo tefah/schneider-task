@@ -59,7 +59,8 @@ class EditPage extends React.Component {
             employee={this.state.employee}
             submit={this.submit}
             deps={this.state.departments}
-            oldDepID={this.state.employee.departmentID?this.state.employee.departmentID:this.state.departments[0]._id}/>
+            oldDepID={this.state.employee.departmentID?this.state.employee.departmentID:this.state.departments[0]._id}
+            />
         )
     }
 }
