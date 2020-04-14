@@ -6,7 +6,7 @@ import { Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
 
-const EmpTable = ({selectedEmps, selectallEmps, employees, deleteEmp, selectEmp, deleteSelected, departments}) => (
+const EmpTable = ({selectedEmps, selectallEmps, employees, deleteEmp, selectEmp, deleteSelected, filterEmps, departments}) => (
     <div className='fragment'>
 
         <h2>Employees list</h2>
@@ -24,6 +24,12 @@ const EmpTable = ({selectedEmps, selectallEmps, employees, deleteEmp, selectEmp,
         variant="outline-secondary" >
             Delete
         </Button>
+        <select onChange={filterEmps} defaultChecked={'all'} >
+            <option key={0} value={'all'} >All departments</option>
+            {departments.map(dep => (
+                <option key={dep._id} value={dep._id} >{dep.name}</option>
+            ))}
+        </select>
         
         <div className="table">
         </div>

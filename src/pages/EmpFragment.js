@@ -6,6 +6,7 @@ import {getDepartments} from '../httpUtils/departmentsRequest'
 class EmpFragment extends Component {
     state = {
         employees: [],
+        filtered: [],
         selected: [],
         departments:[]
     }
@@ -17,7 +18,7 @@ class EmpFragment extends Component {
             err => console.log(err)
         )
         getEmployees(
-            res => { this.setState({employees: res.data  })},
+            res => { this.setState({employees: res.data , filtered: res.data })},
             err => console.log(err)
         )
     }
@@ -28,6 +29,7 @@ class EmpFragment extends Component {
             this.setState((state, props) => {
                 return{
                     employees: state.employees.filter(employee => !ids.includes(employee._id)),
+                    filtered: state.filtered.filter(employee => !ids.includes(employee._id)),
                     selected: []
                 }
             })
@@ -73,21 +75,37 @@ class EmpFragment extends Component {
     selectall = (IS_CHECKED) => {
         console.log(IS_CHECKED)
         if(IS_CHECKED){
-            this.setState({selected: this.state.employees.filter(emp => emp._id)})
+            this.setState({selected: this.state.filtered.filter(emp => emp._id)})
         }else {
             this.setState({selected: []})
+        }
+    }
+
+    //filter employees with the department
+    filterEmps = (e) => {
+        const depID = e.target.value
+        console.log(depID)
+        if(depID === 'all'){
+            this.setState({
+                filtered: this.state.employees
+            })
+        }else{
+            this.setState({
+                filtered: this.state.employees.filter(employee => employee.departmentID === depID)
+            })
         }
     }
 
     render = () => (
         <EmpTable 
         selectedEmps={this.state.selected}
-        employees={this.state.employees}
+        employees={this.state.filtered}
         departments={this.state.departments}
         selectallEmps={this.selectall}
         deleteEmp={this.deleteEmp}
         selectEmp={this.selectEmployee} 
         deleteSelected={this.deleteSelected}
+        filterEmps={this.filterEmps}
         />
     )
 
