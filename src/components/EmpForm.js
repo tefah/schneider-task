@@ -22,6 +22,8 @@ const EditForm = (props) => {
         {team: employee.team},
         {manager: employee.manager},
       ])
+    }else if(deps[0]._id && !formState.dirty){
+        setValue([{departmentID: deps[0]._id}])
     }
     
     //see if the deparment changed it change the manager accordingly 
@@ -124,7 +126,7 @@ const EditForm = (props) => {
                     name='departmentID'
                     control={control} 
                     onChange={([currentTarget])=> {return currentTarget}}
-                    defaultValue={employee.departmentID}
+                    defaultValue={employee.departmentID && deps[0]._id?employee.departmentID:deps[0]._id}
                     />
                 </div>
                 

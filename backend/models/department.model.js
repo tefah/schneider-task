@@ -12,7 +12,6 @@ const departmentSchema = new schema(departmentFields, {timestamps: true})
 
 //deleting all employees of the department after removing it
 departmentSchema.post('findOneAndRemove', (dep) => {
-    console.log('after deleting department', dep)
     employeeController.deleteEmpsWithDepID(dep._id)
   })
 

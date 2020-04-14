@@ -12,7 +12,7 @@ const TableBody = ({department, deleteDep, select, selected}) => {
             <td>{department.name}</td>
             <td>{department.manager}</td>
             <td style={customStyle}>
-                <Link to={"/edit/"+department._id}>edit</Link> |
+                <Link to={"/editDep/"+department._id}>edit</Link> |
                 <button onClick={() => { deleteDep(department._id) }}>delete</button>
             </td>
         </tr>

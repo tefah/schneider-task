@@ -29,23 +29,26 @@ class DepFragment extends Component {
     }
 
     //delete selected departments by making string of ids 'id1,id2,id3,...'
-    // TODO confirm on deleting all employees
     deleteSelected = () => {
         if (window.confirm('Are you sure you wish to delete the selected departments?')){
-            const ids = this.state.selected.map(emp => emp._id)
-            const idStr = ids.toString()
-            deleteDepartment(idStr, 
-                res => this.onSuccessRemovingDeployees(res, ids),
-                err => console.log(err))
+            if(window.confirm('Please NOTICE that ALL employees inside the selected departments will be deleted')){
+                const ids = this.state.selected.map(emp => emp._id)
+                const idStr = ids.toString()
+                deleteDepartment(idStr, 
+                    res => this.onSuccessRemovingDeployees(res, ids),
+                    err => console.log(err))
+            }
         }
     }
 
     //delete department through department delete button
     deleteDep = (id)=>{
         if (window.confirm('Are you sure you wish to delete the selected departments?')){
-            deleteDepartment(id, 
-                res => this.onSuccessRemovingDeployees(res, [id]),
-                err => console.log(err))
+            if(window.confirm('Please NOTICE that ALL employees inside this department will be deleted')){
+                deleteDepartment(id, 
+                    res => this.onSuccessRemovingDeployees(res, [id]),
+                    err => console.log(err))
+            }
         }
     }
 

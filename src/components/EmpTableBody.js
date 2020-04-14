@@ -17,7 +17,7 @@ const TableBody = ({employee, deleteEmp, select, selected, departments}) => {
             <td>{employee.team}</td>
             <td>{employee.manager}</td>
             <td style={customStyle}>
-                <Link to={"/edit/"+employee._id}>edit</Link> |
+                <Link to={"/editEmp/"+employee._id}>edit</Link> |
                 <button onClick={() => { deleteEmp(employee._id) }}>delete</button>
             </td>
         </tr>

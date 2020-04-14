@@ -33,7 +33,7 @@ const DepTable = ({selectedDeps, selectallDeps, deleteDep, selectDep, deleteSele
                 <th>
                     <input type="checkbox" 
                     onChange={(e) => selectallDeps(e.target.checked)}
-                    checked={departments.length === selectedDeps.length && departments !== 0}
+                    checked={departments.length === selectedDeps.length && departments.length !== 0}
                     /> 
                 </th>
                 <th>Department name</th>

@@ -33,7 +33,7 @@ const EmpTable = ({selectedEmps, selectallEmps, employees, deleteEmp, selectEmp,
                 <th>
                     <input type="checkbox" 
                     onChange={(e) => selectallEmps(e.target.checked)}
-                    checked={employees.length === selectedEmps.length && employees !== 0}
+                    checked={employees.length === selectedEmps.length && employees.length !== 0}
                     /> 
                 </th>
                 <th>SESA number</th>
