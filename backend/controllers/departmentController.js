@@ -46,13 +46,15 @@ exports.getSingleDepartment = (req, res) => {
 // ids => must be comma seperated values
 exports.deleteDepartments = (req, res) => {
     const ids = req.query.id.split(',')
-    departments.deleteMany({_id: {$in: ids}})
-    .then(() => res.json('department/s deleted.'))
-    .catch(err => {
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        utils.errorLogging(ip, err)
-        res.status(400).send(`ERROR: while deleteing departments please try again`)
-    })
+    ids.forEach(id => {
+        departments.findByIdAndRemove(id)
+        .then(() => res.json('department/s deleted.'))
+        .catch(err => {
+            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            utils.errorLogging(ip, err)
+            res.status(400).send(`ERROR: while deleteing departments please try again`)
+        })
+    }); 
 }
 
 // Handler for PUT localhost:5000/departments/update/:id

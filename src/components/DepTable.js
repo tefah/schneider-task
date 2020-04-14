@@ -44,11 +44,11 @@ const DepTable = ({selectedDeps, selectallDeps, deleteDep, selectDep, deleteSele
             <tbody>
                 {departments.map(department => {
                     return (<TableBody 
-                        key={departments._id}
+                        key={department._id}
                         department={department} 
                         deleteDep={deleteDep}
                         select={selectDep}
-                        selected={selectedDeps.includes(departments)}
+                        selected={selectedDeps.includes(department)}
                         />)
                 })}
             </tbody>

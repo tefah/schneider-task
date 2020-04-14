@@ -111,3 +111,10 @@ exports.updateEmployeeInternally = (employee) => {
         utils.errorLogging('Internal update to employee failed', err)
     })
 }
+
+
+//delete employees with tha department id
+exports.deleteEmpsWithDepID = (id) =>{
+    employees.deleteMany({departmentID: id})
+    .catch(err => utils.errorLogging('Internal server error', err))
+}
