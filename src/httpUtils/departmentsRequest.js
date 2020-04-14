@@ -10,7 +10,12 @@ export const addDepartment = (department, onSuccess, onError) => {
             .catch(err => onError(err))
 }
 
-
+// PUT localhost:5000/departments/update/:id
+export const editDepartment = (department, onSuccess, onError) => {
+    axios.put(baseurl + '/update/' + department._id, department)
+            .then(res => onSuccess(res))
+            .catch(err => onError(err))
+}
 
 // DELETE localhost:5000/departments/?id=[]
 export const deleteDepartment = (ids, onSuccess, onError) => {

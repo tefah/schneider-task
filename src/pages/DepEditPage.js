@@ -1,37 +1,30 @@
 import React from 'react'
-import EditForm from './EditForm'
-import {getEmployeeByID, addEmployee, editEmployee} from '../httpUtils/EmployeeRequests'
-import {getDepartments} from '../httpUtils/departmentsRequest'
+import EditForm from '../components/DepForm'
+import {addDepartment, editDepartment, getDepartmentByID} from '../httpUtils/departmentsRequest'
 
 class EditPage extends React.Component {
     state = {
-        employee:{},
-        departments:['']
+        department:{}
     }
 
     componentDidMount(){
         if (this.props.match.params.id) {
-            //call to change the state if update
-            getEmployeeByID(this.props.match.params.id,
-                emp => this.setState({ employee: emp }),
+            //call to change the state if edit
+            getDepartmentByID(this.props.match.params.id,
+                dep => this.setState({ department: dep }),
                 err => console.error(err)
             )
         }
-        getDepartments(
-            deps => this.setState({departments: deps}),
-            err => console.log(err)
-        )
-        
     }
 
     //submit (add - edit) employee depending on the context
-    submit = (employee) => {
+    submit = (department) => {
         if (this.props.match.params.id) {
-            employee = {
-                ...employee,
+            department = {
+                ...department,
                 _id: this.props.match.params.id
             }
-            editEmployee(employee, 
+            editDepartment(department, 
                 res => {
                     if (res.status === 200){
                         //TODO: toast updated successfully
@@ -41,7 +34,7 @@ class EditPage extends React.Component {
                 err => console.error(err)
             )
         }else {
-            addEmployee(employee,
+            addDepartment(department,
                 res => {
                     if (res.status === 200){
                         //TODO: toast added successfully
@@ -56,10 +49,8 @@ class EditPage extends React.Component {
     render() {
         return (
             <EditForm 
-            employee={this.state.employee}
+            department={this.state.department}
             submit={this.submit}
-            deps={this.state.departments}
-            oldDepID={this.state.employee.departmentID?this.state.employee.departmentID:this.state.departments[0]._id}
             />
         )
     }

@@ -24,9 +24,6 @@ const EditForm = (props) => {
       ])
     }
     
-    // // run in the begining to make sure the manager input is set to whoever manager of the first department
-    // if(!formState.dirty){oldDepID = deps[0]._id}
-    
     //see if the deparment changed it change the manager accordingly 
     if(watch('departmentID') !== oldDepIDState){
         const departmentID = watch('departmentID')

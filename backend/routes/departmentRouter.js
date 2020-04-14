@@ -13,8 +13,8 @@ router.route('/').delete(departmentsController.deleteDepartments)
 // POST localhost:5000/departments/add
 router.route('/add').post(departmentsController.addDepartment)
 
-// // PUT localhost:5000/departments/update/:id
-// router.route('/update/:id').put(departmentsController.updateDepartment)
+// PUT localhost:5000/departments/update/:id
+router.route('/update/:id').put(departmentsController.updateDepartment)
 
 
 module.exports = router

@@ -55,6 +55,20 @@ exports.deleteDepartments = (req, res) => {
     })
 }
 
+// Handler for PUT localhost:5000/departments/update/:id
+exports.updateDepartment = (req, res) => {
+    const id = req.params.id
+    departments.findOneAndUpdate({_id: id}, req.body)
+    .then(() => {
+        res.send("Updated Sucessfully")
+    })
+    .catch(err => {
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        utils.errorLogging(ip, err)
+        res.status(400).send(`ERROR: while updating department please try again`)
+    })
+}
+
 // increments/decrements the number of employees of a department by 1
 exports.updateDepEmp = async(id, IS_INC) => {
     try{
